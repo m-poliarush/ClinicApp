@@ -7,5 +7,10 @@ export type LoginResponse={
     id: string;
     name: string;
     role: "user" | "admin" | "manager";
-    token: string;
+}
+
+export type AuthContextType = {
+    user: LoginResponse | null;
+    login: (data: LoginRequestProps) => Promise<void>;
+    logout: () => void;
 }
