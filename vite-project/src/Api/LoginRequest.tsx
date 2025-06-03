@@ -4,7 +4,7 @@ import type { LoginRequestProps, LoginResponse } from "../TypeModel/Types";
 
 export const LoginRequest = async (user: LoginRequestProps): Promise<LoginResponse> => {
 try{
-    const response = await axios.post<LoginResponse>('https://api.example.com/login', user)
+    const response = await axios.post<LoginResponse>('https://api.example.com/login', user);
     const data = response.data;
     return data;
 }
