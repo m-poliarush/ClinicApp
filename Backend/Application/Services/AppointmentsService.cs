@@ -22,6 +22,7 @@ namespace Application.Services
             _mapper = mapper;
             _unitOfWork = unitOfWork;
         }
+        
 
         public IEnumerable<UserModel> GetUsersByDoctor(int doctorId)
         {
@@ -35,11 +36,17 @@ namespace Application.Services
         }
         public int CreateAppointmet(int doctorId, int userId)
         {
-            var existAppointment = _unitOfWork.AppointmentsRepository.GetAll(x => x.UserId == userId && x.DoctorId == doctorId);
-            
-            if(existAppointment != null)
+            try
+            {
+                var existAppointment = _unitOfWork.AppointmentsRepository.GetByFilter(x => x.UserId == userId && x.DoctorId == doctorId);
+                if (existAppointment.Count() > 0)
+                    throw new AppointmentAlreadyExistException();
+            }
+            catch (AppointmentAlreadyExistException ex)
+            {
                 throw new AppointmentAlreadyExistException();
-
+            }
+            catch (Exception ex) { }
             var entityToCreate = new Appointment() { DoctorId = doctorId, UserId = userId };
             _unitOfWork.AppointmentsRepository.Create(entityToCreate);
             _unitOfWork.Save();
