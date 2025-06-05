@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Application.Models;
 using AutoMapper;
 using DomainData.DB.Entities;
+using DTOs;
 
 namespace Profiles
 {
@@ -14,6 +15,10 @@ namespace Profiles
         public AppointmentProfile()
         {
             CreateMap<Appointment, AppointmentModel>().ReverseMap();
+            CreateMap<AppointmentModel, AppointmentDTO>()
+                .ForMember(dest => dest.userId, opt => opt.MapFrom(src => src.UserId))
+                .ForMember(dest => dest.doctorId, opt => opt.MapFrom(src => src.DoctorId))
+                .ReverseMap();
         }
     }
 }
