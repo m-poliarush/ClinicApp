@@ -6,7 +6,10 @@ using System.Threading.Tasks;
 
 namespace DTOs
 {
-    internal class AppointmentDTO
+    public class AppointmentDTO
     {
+        public int id {  get; set; }
+        public int userId { get; set; }
+        public int doctorId { get; set; }
     }
 }
