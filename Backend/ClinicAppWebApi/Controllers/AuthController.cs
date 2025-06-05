@@ -2,6 +2,7 @@ using Application.Exceptions;
 using Application.Models;
 using Application.Services.Interfaces;
 using AutoMapper;
+using ClinicAppWebApi.Controllers.Interfaces;
 using Contracts;
 using DTOs;
 using Microsoft.AspNetCore.Mvc;
@@ -10,7 +11,7 @@ namespace ClinicAppWebApi.Controllers
 {
     [ApiController]
     [Route("Auth")]
-    public class AuthController : ControllerBase
+    public class AuthController : ControllerBase, IAuthController
     {
         private readonly IAuthService _authService;
         private readonly IMapper _mapper;

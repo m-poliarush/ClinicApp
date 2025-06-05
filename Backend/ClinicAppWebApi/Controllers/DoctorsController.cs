@@ -2,6 +2,7 @@
 using Application.Services;
 using Application.Services.Interfaces;
 using AutoMapper;
+using ClinicAppWebApi.Controllers.Interfaces;
 using DTOs;
 using Microsoft.AspNetCore.Mvc;
 
@@ -9,7 +10,7 @@ namespace ClinicAppWebApi.Controllers
 {
     [ApiController]
     [Route("Doctors")]
-    public class DoctorsController : ControllerBase
+    public class DoctorsController : ControllerBase, IDoctorsComtroller
     {
         private readonly IDoctorsService _doctorsService;
         private readonly IMapper _mapper;
@@ -19,6 +20,7 @@ namespace ClinicAppWebApi.Controllers
             _doctorsService = doctorsService;
             _mapper = mapper;
         }
+
         [HttpGet("GetAll")]
         public IActionResult GetAll()
         {
@@ -26,14 +28,26 @@ namespace ClinicAppWebApi.Controllers
             var result = userModels.Select(x => _mapper.Map<DoctorDTO>(x));
             return Ok(result);
         }
+
+        [HttpPost("Create")]
+        public IActionResult Create([FromBody] DoctorDTO doctor) {
+            var modelToCtreate = _mapper.Map<DoctorModel>(doctor);
+            if(modelToCtreate != null)
+            {
+                var id =  _doctorsService.CreateDoctor(modelToCtreate);
+                return Ok(id);
+            }
+            return BadRequest();
+            
+        }
         [HttpGet("{id}")]
         public IActionResult GetbyId(int id)
         {
             try
             {
-                var userModel = _doctorsService.GetById(id);
-                if (userModel != null)
-                    return Ok(_mapper.Map<UserDTO>(userModel));
+                var doctorModel = _doctorsService.GetById(id);
+                if (doctorModel != null)
+                    return Ok(_mapper.Map<DoctorDTO>(doctorModel));
                 return BadRequest("Лікаря не знайдено");
             }
             catch (Exception ex)
@@ -41,7 +55,7 @@ namespace ClinicAppWebApi.Controllers
                 return BadRequest("Лікаря не знайдено");
             }
         }
-        [HttpPost("Update")]
+        [HttpPut("Update")]
         public IActionResult UpdateDoctor([FromBody] DoctorDTO doctor)
         {
             var userModel = _mapper.Map<DoctorModel>(doctor);

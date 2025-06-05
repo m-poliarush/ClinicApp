@@ -1,6 +1,7 @@
 using Application.Services;
 using Application.Services.Interfaces;
 using ClinicAppWebApi.Controllers;
+using ClinicAppWebApi.Controllers.Interfaces;
 using DomainData.DB;
 using DomainData.UoW;
 using Profiles;
@@ -21,11 +22,11 @@ builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped<IUsersService, UsersService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IDoctorsService, DoctorsService>();
+builder.Services.AddScoped<IAppointmentsService, AppointmentsService>();
 
 builder.Services.AddAutoMapper(typeof(UserProfile).Assembly);
 
-builder.Services.AddScoped<AuthController, AuthController>();
-builder.Services.AddScoped<UsersController, UsersController>();
+builder.Services.AddScoped<IAuthController, AuthController>();
 
 builder.Services.AddCors(options =>
 {

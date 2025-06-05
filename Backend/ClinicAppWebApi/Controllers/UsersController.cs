@@ -1,6 +1,7 @@
 ﻿using Application.Models;
 using Application.Services.Interfaces;
 using AutoMapper;
+using ClinicAppWebApi.Controllers.Interfaces;
 using DTOs;
 using Microsoft.AspNetCore.Mvc;
 
@@ -8,7 +9,7 @@ namespace ClinicAppWebApi.Controllers
 {
     [ApiController]
     [Route("Users")]
-    public class UsersController : ControllerBase
+    public class UsersController : ControllerBase, IUsersController
     {
         private readonly IUsersService _usersService;
         private readonly IMapper _mapper;
@@ -40,7 +41,7 @@ namespace ClinicAppWebApi.Controllers
                 return BadRequest("Користувача не знайдено");
             }
         }
-        [HttpPost("Update")]
+        [HttpPut("Update")]
         public IActionResult UpdateUser([FromBody]UserDTO user) {
             var userModel = _mapper.Map<UserModel>(user);
             try
