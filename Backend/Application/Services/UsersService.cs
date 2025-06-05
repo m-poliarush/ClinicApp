@@ -1,11 +1,13 @@
-﻿using Application.Models;
+﻿using Application.Exceptions;
+using Application.Models;
+using Application.Services.Interfaces;
 using AutoMapper;
 using DomainData.UoW;
 
 
 namespace Application.Services
 {
-    public class UsersService
+    public class UsersService : IUsersService
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
@@ -27,14 +29,38 @@ namespace Application.Services
 
             }
             catch (Exception e) {
-                throw new IndexOutOfRangeException("Wrong id");
+                throw new UserNotFoundException();
             }
         }
-        public IEnumerable<DoctorModel> GetDoctorsbyUser(int userId)
-        {
-            var doctorIdList = _unitOfWork.AppointmentsRepository.GetAll().Where(x => x.UserId == userId).Select(x => { return _unitOfWork.AppointmentsRepository.GetById(x.DoctorId); });
-            return doctorIdList.Select(x => { return _mapper.Map<DoctorModel>(x); });
+        public void Update(UserModel user) {
+            try
+            {
+                var entityToUpdate = _unitOfWork.UsersRepository.GetTrackedOrAttach(user.Id);
+                if (entityToUpdate != null)
+                {
+                    _mapper.Map(user, entityToUpdate);
+                    _unitOfWork.Save();
+                }
+            }
+            catch {
+            
+            }
+            
         }
+        public void Delete(int id) {
+            try
+            {
+                var entity = _unitOfWork.UsersRepository.GetTrackedOrAttach(id);
+                if (entity != null)
+                    _unitOfWork.UsersRepository.Delete(id);
+                _unitOfWork.Save();
+            }
+            catch(Exception ex)
+            {
+                throw new UserNotFoundException();
+            }
+        }
+        
 
     }
 }
