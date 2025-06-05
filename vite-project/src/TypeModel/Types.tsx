@@ -13,4 +13,5 @@ export type AuthContextType = {
     user: LoginResponse | null;
     login: (data: LoginRequestProps) => Promise<void>;
     logout: () => void;
+    registration: (data: LoginRequestProps) => Promise<void>;
 }

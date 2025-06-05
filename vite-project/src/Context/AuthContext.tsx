@@ -1,7 +1,7 @@
 import { createContext, useContext, useEffect, useState } from 'react';
 import { LoginRequest } from '../Api/LoginRequest';
 import type{ AuthContextType, LoginRequestProps, LoginResponse } from '../TypeModel/Types';
-
+import { RegisterRequest } from '../Api/RegisterRequest';
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
@@ -20,6 +20,10 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
             setUser(response);
             localStorage.setItem('user', JSON.stringify(response));
         }
+ 
+const registration = async (data: LoginRequestProps) => {
+    const response: string = await RegisterRequest(data);
+}
 
     const logout = () => {
         setUser(null);
@@ -27,7 +31,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     };
 
     return (
-        <AuthContext.Provider value={{ user, login, logout }}>
+        <AuthContext.Provider value={{ user, login, logout, registration }}>
             {children}
         </AuthContext.Provider>
     );
