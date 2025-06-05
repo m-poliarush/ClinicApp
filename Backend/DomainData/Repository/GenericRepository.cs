@@ -41,6 +41,16 @@ namespace DomainData.Repository
 
             return query.ToList();
         }
+        public IEnumerable<TModel> GetByFilter(Expression<Func<TModel, bool>> filter, params Func<IQueryable<TModel>, IQueryable<TModel>>[] includes)
+        {
+            IQueryable<TModel> query = _dbSet.Where(filter);
+
+            foreach (var include in includes)
+                query = include(query);
+
+            return query.ToList();
+
+        }
 
 
         public void Create(TModel model)

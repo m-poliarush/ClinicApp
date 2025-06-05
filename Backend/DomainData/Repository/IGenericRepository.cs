@@ -6,6 +6,7 @@ namespace DomainData.Repository
     {
         public TModel GetById(int id, params Expression<Func<TModel, object>>[] includes);
         public List<TModel> GetAll(params Expression<Func<TModel, object>>[] includes);
+        public IEnumerable<TModel> GetByFilter(Expression<Func<TModel, bool>> filter, params Func<IQueryable<TModel>, IQueryable<TModel>>[] includes);
         public void Attach(TModel model);
 
         public void Create(TModel model);
