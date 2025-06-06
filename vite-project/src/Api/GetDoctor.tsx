@@ -4,7 +4,7 @@ import type { Doctor } from "../TypeModel/Types";
 
 export const GetDoctor = async ()=>{
     try {
-        const response = await axios.get<Doctor[]>(`https://api.example.com/doctor/`);
+        const response = await axios.get<Doctor[]>(`https://localhost:7120/Doctors/GetAll`);
         const data = response.data;
         return data;
     }catch (error) {

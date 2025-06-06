@@ -37,8 +37,7 @@ const handleSubmit = () => {
             setErrorMessage("Пожалуйста, войдите в систему.");
             return;
         }
-       PostSearch(doctors, user?.id);
-        navigate("/")
+       PostSearch(selectedDoctor, user?.id);
     }catch (error) {
         console.error("Failed to submit search:", error);
         setErrorMessage("Search request failed. Please try again later.");
@@ -62,7 +61,7 @@ return (
                 <div className="col-md-6">
                     <div className="list-group">
                         {doctors.map((doctor) => (
-                            <button data-aos="fade-right"
+                            <button
                                 key={doctor.id}
                                 className={`list-group-item list-group-item-action ${
                                     selectedDoctor === doctor.id ? "active" : ""

@@ -6,7 +6,7 @@ const payload = {
     doctorID,
 };
 try {
-const response = await axios.post(`https://api.example.com/search`, payload);
+const response = await axios.post(`https://localhost:7120/Appointments/Create`, payload);
     const data = response.data;
     return data;
 }catch (error) {

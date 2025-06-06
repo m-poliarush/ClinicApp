@@ -2,7 +2,7 @@ import axios from "axios";
 
 export const DeleteUser = async (userID: number): Promise<void> => {
   try {
-    const response = await axios.delete(`https://api.example.com/user/${userID}`);
+    const response = await axios.delete(`https://localhost:7120/Users/Delete${userID}`);
     if (response.status !== 200) {
       throw new Error("Failed to delete user.");
     }

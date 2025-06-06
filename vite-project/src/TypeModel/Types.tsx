@@ -25,6 +25,5 @@ export type Doctor = {
 
 export type PersonForm = {
   name: string;
-  isDoctor: boolean;
   specialization?: string;
 };

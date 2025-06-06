@@ -10,6 +10,7 @@ import { useForm } from "react-hook-form";
 import type { PersonForm } from "../TypeModel/Types";
 import { AddDoctor } from "../Api/AddDoctor";
 import { DeleteUser } from "../Api/DeleteUser";
+import { GetDoctor } from "../Api/GetDoctor";
 
 const specializations = [
   "Нейрохірург",
@@ -24,11 +25,17 @@ const AdminPanel = () => {
   const isDoctor = watch("isDoctor");
 const { user } = useAuth();
 const [users, setUsers] = useState<any[]>([]);
+const [doctor, setDoctor] = useState<any[]>([]);
 const [ErrorMessage, setErrorMessage] = useState<string | null>(null);
 const navigate = useNavigate();
+const [selectedUser, setSelectedUser] = useState<number | null>(null);
 const [selectedDoctor, setSelectedDoctor] = useState<number | null>(null);
 useEffect(() => {
-    const fetchData = async () => {
+    fetchData();
+    fetchDoctors();
+}, []);
+
+const fetchData = async () => {
         try {
             const data = await GetUsers();
             setUsers(data);
@@ -37,12 +44,20 @@ useEffect(() => {
             setErrorMessage("Failed to fetch doctor information. Please try again later.");
         }
     }
-    fetchData();
-}, []);
+
+const fetchDoctors = async () => {
+  try {
+    const data = await GetDoctor();
+    setDoctor(data);
+  } catch (error) {
+    console.error("Failed to fetch doctors:", error);
+    setErrorMessage("Failed to fetch doctor information. Please try again later.");
+  }
+};
 
 const handlePromote = async () => {
     try {
-        if (!selectedDoctor) {
+        if (!selectedUser) {
             setErrorMessage("Пожалуйста, выберите врача.");
             return;
         }
@@ -50,7 +65,7 @@ const handlePromote = async () => {
             setErrorMessage("Пожалуйста, войдите в систему.");
             return;
         }
-      await PromoteToManager(selectedDoctor)
+      await PromoteToManager(selectedUser)
        
     } catch (error) {
         console.error("Failed to submit search:", error);
@@ -59,7 +74,7 @@ const handlePromote = async () => {
 
 const handleDelete = async () => {
     try {
-        if (!selectedDoctor) {
+        if (!selectedUser) {
             setErrorMessage("Пожалуйста, выберите врача.");
             return;
         }
@@ -67,8 +82,9 @@ const handleDelete = async () => {
             setErrorMessage("Пожалуйста, войдите в систему.");
             return;
         }
-        await DeleteUser(selectedDoctor)
-       
+        await DeleteUser(selectedUser)
+        await fetchData();
+        setSelectedUser(null);
     } catch (error) {
         console.error("Failed to submit search:", error);
     }
@@ -83,6 +99,25 @@ const handleDelete = async () => {
         setErrorMessage("Failed to submit form. Please try again later.");
     }
  }
+
+ const handleDeleteDoctor = async () => {
+    try { 
+        if (!selectedDoctor) {
+            setErrorMessage("Пожалуйста, выберите врача.");
+            return;
+        }
+        if (!user) {
+            setErrorMessage("Пожалуйста, войдите в систему.");
+            return;
+        }
+        await DeleteDoctor(selectedDoctor);
+        await fetchDoctors();
+        setSelectedDoctor(null);
+    } catch (error) {
+        console.error("Failed to delete doctor:", error);
+        setErrorMessage("Failed to delete doctor. Please try again later.");
+    }
+  }
 
 
 return(
@@ -106,17 +141,7 @@ return(
       />
     </div>
 
-    <div className="form-check mb-3">
-      <input 
-        type="checkbox" 
-        className="form-check-input" 
-        id="isDoctor" 
-        {...register("isDoctor")} 
-      />
-      <label htmlFor="isDoctor" className="form-check-label">Це лікар?</label>
-    </div>
 
-    {isDoctor && (
       <div className="mb-3">
         <label htmlFor="specialization" className="form-label">Спеціалізація:</label>
         <select 
@@ -132,7 +157,6 @@ return(
           ))}
         </select>
       </div>
-    )}
 
     <div className="d-grid">
       <button type="submit" className="btn btn-primary">
@@ -144,7 +168,7 @@ return(
 
           {user?.role === "admin" &&( <div className="container mt-5">
 
-            <h2 className="mb-4 text-center">Выберите пользователя</h2>
+            <h2 className="mb-4 text-center">Выберите Пользователя</h2>
 
             {ErrorMessage && (
                 <div className="alert alert-danger text-center">{ErrorMessage}</div>
@@ -154,12 +178,12 @@ return(
                 <div className="col-md-6">
                     <div className="list-group">
                         {users.map((user) => (
-                            <button data-aos="fade-right"
+                            <button 
                                 key={user.id}
                                 className={`list-group-item list-group-item-action ${
-                                    selectedDoctor === user.id ? "active" : ""
+                                    selectedUser === user.id ? "active" : ""
                                 }`}
-                                onClick={() => setSelectedDoctor(user.id)}
+                                onClick={() => setSelectedUser(user.id)}
                             >
                                 <strong>{user.name}</strong> — {user.specialization}
                             </button>
@@ -176,6 +200,36 @@ return(
                 </div>
             </div>
         </div>)}
+
+        <div className="container mt-5">
+
+            <h2 className="mb-4 text-center">Выберите Доктора</h2>
+
+            
+
+            <div className="row">
+                <div className="col-md-6">
+                    <div className="list-group">
+                        {doctor.map((doctor) => (
+                            <button
+                                key={doctor.id}
+                                className={`list-group-item list-group-item-action ${
+                                    selectedDoctor === doctor.id ? "active" : ""
+                                }`}
+                                onClick={() => setSelectedDoctor(doctor.id)}
+                            >
+                                <strong>{doctor.name}</strong> — {doctor.specialization}
+                            </button>
+                        ))}
+                    </div>
+                </div>
+                <div className="col-md-6 d-flex justify-content-center align-items-center gap-3 p-3">
+                    <Button data-aos="fade-left" variant="danger" onClick={handleDeleteDoctor}>
+                        Удалить
+                    </Button>
+                </div>
+            </div>
+        </div>
     </>
 )
 }

@@ -21,7 +21,7 @@ function App() {
    <Route path="/register" element={<Registration/>} />
     <Route path="/admin" element={user?.role === "admin" || "manager" ? <AdminPanel/> : <Navigate to="/"/>} />
     <Route path="/login" element={<Authentication/>} />
-    <Route path="/search" element={user?.role === "admin" || user?.role === "manager" ? <AdminPanel/> : <Navigate to="/"/>}/>
+    <Route path="/search" element={user?.role != undefined ? <Search/> : <Navigate to="/"/>}/>
   </Routes>
 </Router>
     </>

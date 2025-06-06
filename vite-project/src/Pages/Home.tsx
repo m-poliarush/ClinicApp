@@ -9,7 +9,7 @@ import { useEffect } from "react";
 
 
 const Home = () => {
-  const { user } = useAuth();
+  const { user, logout } = useAuth();
   const navigate = useNavigate();
 
 
@@ -25,16 +25,24 @@ useEffect(() => {
       <div data-aos="zoom-in" className="home-header">
         <img src="/clinic-logo.png" alt="Clinic Logo" className="logo-image" />
         <div className="buttons">
-      
-      { user?.role === "admin" || user?.role === "manager" &&  ( <button onClick={() => navigate("/admin")} className="btn btn-danger p-1">Admin</button>)}
-          <button data-aos="fade-down" onClick={() => navigate("/login")} className="btn btn-primary p-1">Авторизация</button>
-          <button data-aos="fade-down"  onClick={() => navigate("/register")}   className="btn btn-secondary p-2">Регистрация</button>
+        <div className="d-flex justify-content-center align-items-center">
+          {user?.role}
+        </div>
+      { (user?.role === "admin" || user?.role === "manager") &&  ( <button onClick={() => navigate("/admin")} className="btn btn-danger p-1">Admin</button>)}
+      {user === null && ( <><button data-aos="fade-down" onClick={() => navigate("/login")} className="btn btn-primary p-1">   Авторизация
+    </button>
+    <button data-aos="fade-down" onClick={() => navigate("/register")} className="btn btn-secondary p-2">
+      Регистрация
+    </button>
+  </>
+)}
+          {user !== null && (<button data-aos="fade-down"  onClick={() => logout()}   className="btn btn-secondary p-2">Вийти</button> )}
         </div>
       </div>
 
       <hr className="divider" />
 
-   {user?.role && <div className="search-section">
+   {user?.role  && <div className="search-section">
         <button onClick={() => navigate("/search")} className="search-button">Подобрать лучшего врача</button>
       </div>}
 

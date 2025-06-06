@@ -2,7 +2,7 @@ import axios from "axios";
 
 export const DeleteDoctor = async (doctorID: number): Promise<void> => {
     try {
-        const response = await axios.delete(`https://api.example.com/doctor/${doctorID}`);
+        const response = await axios.delete(`https://localhost:7120/Doctors/Delete${doctorID}`);
         if (response.status !== 200) {
             throw new Error("Failed to delete doctor.");
         }
