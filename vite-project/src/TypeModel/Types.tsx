@@ -15,3 +15,16 @@ export type AuthContextType = {
     logout: () => void;
     registration: (data: LoginRequestProps) => Promise<void>;
 }
+
+export type Doctor = {
+    id: string;
+    name: string;
+    description: string;
+    specialization: string;
+}
+
+export type PersonForm = {
+  name: string;
+  isDoctor: boolean;
+  specialization?: string;
+};

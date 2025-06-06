@@ -1,3 +1,4 @@
+
 .page-container {
   max-width: 1400px;
   margin: 0 auto;
@@ -17,6 +18,21 @@
 
 .logo-image {
   object-fit: contain;
+}
+
+.btn {
+  padding: 10px 20px;
+  font-size: 16px;
+  cursor: pointer;
+  border: none;
+  border-radius: 4px;
+  transition: background 0.2s ease, transform 0.2s ease !important;
+  height: 50px;
+  width: 110px;
+}
+
+.btn:hover {
+  transform: scale(1.05) !important;
 }
 
 .buttons {
