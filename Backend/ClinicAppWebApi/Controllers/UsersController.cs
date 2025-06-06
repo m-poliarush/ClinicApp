@@ -32,7 +32,7 @@ namespace ClinicAppWebApi.Controllers
             try
             {
                 var userModel = _usersService.GetById(id);
-                if(userModel != null)
+                if (userModel != null)
                     return Ok(_mapper.Map<UserDTO>(userModel));
                 return BadRequest("Користувача не знайдено");
             }
@@ -42,7 +42,7 @@ namespace ClinicAppWebApi.Controllers
             }
         }
         [HttpPut("Update")]
-        public IActionResult UpdateUser([FromBody]UserDTO user) {
+        public IActionResult UpdateUser([FromBody] UserDTO user) {
             var userModel = _mapper.Map<UserModel>(user);
             try
             {
@@ -51,6 +51,14 @@ namespace ClinicAppWebApi.Controllers
             catch (Exception ex) {
                 return BadRequest("Користувача не знайдено");
             }
+            return Ok();
+        }
+        [HttpPut("MakeManager{id}")]
+        public IActionResult MakeManager([FromRoute]int id)
+        {
+            var userModel = _usersService.GetById(id);
+            userModel.Role = "manager";
+            _usersService.Update(userModel);
             return Ok();
         }
         [HttpDelete("Delete{id}")]

@@ -13,10 +13,15 @@ import { DeleteUser } from "../Api/DeleteUser";
 import { GetDoctor } from "../Api/GetDoctor";
 
 const specializations = [
-  "Нейрохірург",
-  "Кардіолог",
-  "Терапевт",
-  "Дерматолог"
+    "Therapist",
+    "Surgeon",
+    "Cardiologist",
+    "Neurologist",
+    "Dermatologist",
+    "Oncologist",
+    "Ophthalmologist",
+    "Psychiatrist",
+    "Dentist"
 ];
 
 const AdminPanel = () => {
