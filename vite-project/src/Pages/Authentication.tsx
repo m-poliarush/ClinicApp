@@ -18,6 +18,7 @@ const Authentication = () => {
         try {
           setErrorMessage(null); 
            await login(data);
+           console.log('Login successful');
           navigate("/")
         } catch (error) {
             console.error('Login failed:', error);
@@ -28,7 +29,8 @@ const Authentication = () => {
       <>
            <div className="d-flex flex-column align-items-center justify-content-center min-vh-100">
     <header className="mb-5">
-      <img
+      <img data-aos="fade-down"
+      onClick={() => navigate("/")}
         src="/clinic-logo.png"
         alt="Clinic Logo"
         className="d-block mx-auto"
@@ -36,7 +38,7 @@ const Authentication = () => {
       />
     </header>
 
-    <Form
+    <Form data-aos="zoom-in"
       onSubmit={handleSubmit(onSubmit)}
       className="p-4 border rounded bg-white"
       style={{ width: '100%', maxWidth: '400px' }}
@@ -66,7 +68,7 @@ const Authentication = () => {
     <div className="alert alert-danger" role="alert">
     {errorMessage}
     </div>)}
-      <Button variant="primary" type="submit" className='w-100 bg-secondary border-0'> 
+      <Button variant="primary" type="submit" className='w-100 bg-primary border-0'> 
         Увійти
       </Button>
     </Form>

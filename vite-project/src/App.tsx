@@ -4,9 +4,9 @@ import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-d
 import { useAuth } from './Context/AuthContext'
 import Home from './Pages/Home'
 import Registration from './Pages/Registration'
-//import SearchPanel from './Pages/SearchPanel'
-//import AdminPanel from './Pages/AdminPanel'
+import AdminPanel from './Pages/AdminPanel'
 import Authentication from './Pages/Authentication'
+import Search from './Pages/Search'
 
 
 function App() {
@@ -17,15 +17,17 @@ function App() {
     <>
 <Router>
   <Routes>
-    <Route path="/" element={<Authentication/>} /> 
+    <Route path="/" element={<Home/>} /> 
    <Route path="/register" element={<Registration/>} />
-    {/*<Route path="/admin" element={user?.role === "admin" ? <AdminPanel/> : <Navigate to="/"/>} />*/}
-    {/*<Route path="/search" element={user ? <SearchPanel/> : <Navigate to="/"/>} />*/}
-    {/*<Route path="/login" element={<Authentication/>} />*/}
+    <Route path="/admin" element={user?.role === "admin" || "manager" ? <AdminPanel/> : <Navigate to="/"/>} />
+    <Route path="/login" element={<Authentication/>} />
+    <Route path="/search" element={user?.role === "admin" || user?.role === "manager" ? <AdminPanel/> : <Navigate to="/"/>}/>
   </Routes>
 </Router>
     </>
+
   )
 }
 
 export default App
+

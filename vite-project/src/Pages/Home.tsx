@@ -1,61 +1,77 @@
-import React from "react";
+"use client"
+import React, { use } from "react";
 import "../Styles/Home.scss";
+import { useAuth } from "../Context/AuthContext";
+import { useNavigate } from "react-router-dom";
+import AOS from "aos";
+import "aos/dist/aos.css";
+import { useEffect } from "react";
+
 
 const Home = () => {
+  const { user } = useAuth();
+  const navigate = useNavigate();
+
+
+useEffect(() => {
+    AOS.init({
+      duration: 1000,
+      once: true,
+    });
+  }, []);
+
   return (
     <div className="page-container">
-      <div className="home-header">
+      <div data-aos="zoom-in" className="home-header">
         <img src="/clinic-logo.png" alt="Clinic Logo" className="logo-image" />
         <div className="buttons">
-          <button className="btn btn-primary">Auth</button>
-          <button className="btn btn-secondary">Reg</button>
+      
+      { user?.role === "admin" || user?.role === "manager" &&  ( <button onClick={() => navigate("/admin")} className="btn btn-danger p-1">Admin</button>)}
+          <button data-aos="fade-down" onClick={() => navigate("/login")} className="btn btn-primary p-1">Авторизация</button>
+          <button data-aos="fade-down"  onClick={() => navigate("/register")}   className="btn btn-secondary p-2">Регистрация</button>
         </div>
       </div>
 
       <hr className="divider" />
 
-      <div className="search-section">
-        {/* <input
-          type="text"
-          placeholder="Введите фамилию врача"
-          className="search-input"
-        /> */}
-        <button className="search-button">Искать</button>
-      </div>
+   {user?.role && <div className="search-section">
+        <button onClick={() => navigate("/search")} className="search-button">Подобрать лучшего врача</button>
+      </div>}
 
-      <div className="doctor-cards">
+      <div data-aos="zoom-in" className="doctor-cards">
         <div className="doctor-card">
           <img
             src="/doctor1-photo.jpg"
             alt="Doctor 1"
             className="doctor-photo"
           />
-          <h3>Dr. Дядя Богдан</h3>
+          <h3>Богдан Гаченко</h3>
           <p>
             Учредитель клиники и ведущий мировой специалист в сфере
-            Нейрохирургии - Богдан Гаченко
+            Нейрохирургии и Нейропсихологии. Проводит онлайн
+            консультации по программам "Нейропсихология" и "Нейрохирургия"
           </p>
         </div>
-        <div className="doctor-card">
+        <div data-aos="zoom-in" className="doctor-card">
           <img
             src="/doctor2-photo.jpg"
             alt="Doctor 2"
             className="doctor-photo"
           />
-          <h3>Dr. Папаня</h3>
+          <h3>Виталий Цаль</h3>
           <p>
             Ведущий психолог клиники Дяди Богдана, проводящий онлайн
             консультации по програмам "Духовное Здоровье" и "Сдерживание Гнева
           </p>
         </div>
-        <div className="doctor-card">
+        <div data-aos="zoom-in" className="doctor-card">
           <img
-            src="/doctor3-photo.jpg"
+            src="/Gvintik.jpg"
             alt="Doctor 3"
             className="doctor-photo"
           />
-          <h3>Dr. Bald from Brazzers</h3>
-          <p>Проктолог</p>
+          <h3>Илья Винтик</h3>
+          <p>Ведущий специалист Киева по физиотерапии. По совместительству ведущий интернетуры в клинике и член ассоциации "Мирового съезда врачей"</p>
         </div>
       </div>
     </div>
